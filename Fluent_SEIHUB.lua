@@ -5832,21 +5832,29 @@ ElementsTable.Dropdown = (function()
 			RecalculateListPosition()
 		end)
 
+		local dropdownDebounce = false
 		Creator.AddSignal(DropdownInner.MouseButton1Click, function()
+			if Mobile then return end
+			if dropdownDebounce then return end
+			dropdownDebounce = true
 			if Dropdown.Opened then
 				Dropdown:Close()
 			else
 				Dropdown:Open()
 			end
+			task.delay(0.2, function() dropdownDebounce = false end)
 		end)
 
 		Creator.AddSignal(DropdownInner.InputBegan, function(Input)
 			if Input.UserInputType == Enum.UserInputType.Touch then
+				if dropdownDebounce then return end
+				dropdownDebounce = true
 				if Dropdown.Opened then
 					Dropdown:Close()
 				else
 					Dropdown:Open()
 				end
+				task.delay(0.3, function() dropdownDebounce = false end)
 			end
 		end)
 
@@ -5865,6 +5873,7 @@ ElementsTable.Dropdown = (function()
 				Input.UserInputType == Enum.UserInputType.MouseButton1
 				or Input.UserInputType == Enum.UserInputType.Touch
 			then
+				if dropdownDebounce then return end
 				local mousePos = Input.UserInputType == Enum.UserInputType.MouseButton1 and Vector2.new(Mouse.X, Mouse.Y) or Input.Position
 				local AbsPos, AbsSize = DropdownHolderFrame.AbsolutePosition, DropdownHolderFrame.AbsoluteSize
 				local innerAbsPos, innerAbsSize = DropdownInner.AbsolutePosition, DropdownInner.AbsoluteSize
