@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>valen hub (free)</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" id="site-favicon" href="">
+</head>
+<body id="top">
+    <div id="banned-lock-overlay">
+        <div class="banned-lock-box">
+            <div class="banned-lock-icon"><i class="fa-solid fa-user-slash"></i></div>
+            <h3>บัญชีถูกระงับการใช้งาน</h3>
+            <p id="banned-lock-username">บัญชีนี้</p>
+            <p class="banned-lock-desc">บัญชีนี้ถูกแอดมินแบน ไม่สามารถใช้งานเว็บไซต์นี้ได้ หากคิดว่าเป็นความผิดพลาด กรุณาติดต่อแอดมิน</p>
+        </div>
+    </div>
+
+    <div id="loading-overlay">
+        <div class="loader-text" data-shop-name>VALEN HUB</div>
+        <div class="progress-container"><div class="progress-bar" id="load-bar"></div></div>
+    </div>
+
+    <canvas id="bg-canvas"></canvas>
+    <div id="bg-grid"></div>
+
+    <header class="fixed w-full top-0 z-[500] py-6 px-6 transition-all duration-500" id="header">
+        <div id="header-inner" class="max-w-6xl mx-auto flex justify-between items-center bg-black/20 border border-white/5 p-4 rounded-[35px] backdrop-blur-xl transition-all duration-500">
+            <div class="flex items-center gap-5">
+                <div class="text-xl font-black italic tracking-tighter group cursor-pointer flex items-center" onclick="goTo('#top')">
+                    <span data-shop-logo-slot></span>
+                    <span data-shop-name>VALEN HUB</span><span class="text-white/40 group-hover:text-white transition-colors duration-300">.SHOP</span>
+                </div>
+                <div class="h-5 w-[1px] bg-white/10 hidden xl:block"></div>
+                <div class="hidden xl:flex flex-col text-[8px] font-bold uppercase tracking-[3px] text-secondary">
+                    <span class="flex items-center gap-1.5"><i class="fa-solid fa-microchip text-[7px]"></i> Time Zone GMT+7</span>
+                    <span id="digital-clock" class="text-white">00:00:00</span>
+                </div>
+            </div>
+
+            <nav class="hidden lg:flex gap-4 items-center nav-container">
+                <div id="nav-indicator" class="nav-indicator"></div>
+                <div onclick="goTo('#top')" class="nav-item" data-nav-link><i class="fa-solid fa-house"></i> <span>หน้าหลัก</span></div>
+                <span class="nav-comma" data-nav-link>,</span>
+                <div onclick="goTo('#shop')" class="nav-item" data-nav-link><i class="fa-solid fa-store"></i> <span>สินค้า</span></div>
+                <span class="nav-comma" data-nav-link>,</span>
+                <div onclick="openTopupModal()" class="nav-item" data-nav-link><i class="fa-solid fa-wallet"></i> <span>เติมเงิน</span></div>
+            </nav>
+
+            <div class="flex items-center gap-3 shrink-0">
+                <div id="wallet-chip" onclick="openTopupModal()" style="display:none;"></div>
+                <div id="auth-widget">
+                    <div id="auth-login-btn" data-auth-logged-out class="btn-outline !px-5 !py-3 !text-[8.5px] !gap-1.5" onclick="discordLogin()">
+                        <i class="fa-brands fa-discord"></i> <span>เข้าสู่ระบบ</span>
+                    </div>
+                    <div class="profile-wrap" data-auth-logged-in style="display:none">
+                        <div id="auth-user-chip" onclick="toggleProfileMenu()">
+                            <img data-auth-avatar src="" alt="avatar">
+                            <span data-auth-name class="truncate max-w-[100px]"></span>
+                            <i class="fa-solid fa-chevron-down profile-caret"></i>
+                        </div>
+                        <div class="profile-menu" id="profile-menu">
+                            <div class="profile-menu-item" onclick="closeProfileMenu(); openOrderHistory();"><i class="fa-solid fa-bag-shopping"></i> ประวัติการรับสินค้า</div>
+                            <div class="profile-menu-item" onclick="closeProfileMenu(); openTopupHistory();"><i class="fa-solid fa-clock-rotate-left"></i> ประวัติการเติมเงิน</div>
+                            <div class="profile-menu-item" data-auth-admin style="display:none;" onclick="closeProfileMenu(); openAdminPanel();"><i class="fa-solid fa-gear"></i> แผงแอดมิน</div>
+                            <div class="profile-menu-divider"></div>
+                            <div class="profile-menu-item is-danger" onclick="closeProfileMenu(); discordLogout();"><i class="fa-solid fa-arrow-right-from-bracket"></i> ออกจากระบบ</div>
+                        </div>
+                    </div>
+                </div>
+                <div onclick="goTo('#shop')" class="btn-main header-shop-btn"><span>เลือกรับสินค้า</span> <i class="fa-solid fa-chevron-right text-[7px]"></i></div>
+                <div class="mobile-menu-btn" id="mobile-menu-btn" onclick="toggleMobileNav()"><i class="fa-solid fa-bars"></i></div>
+            </div>
+        </div>
+
+        <div class="mobile-nav-panel" id="mobile-nav-panel">
+            <div class="mobile-nav-inner">
+                <div class="mobile-nav-item" onclick="closeMobileNav(); goTo('#top')"><i class="fa-solid fa-house"></i> หน้าหลัก</div>
+                <div class="mobile-nav-item" onclick="closeMobileNav(); goTo('#shop')"><i class="fa-solid fa-store"></i> สินค้า</div>
+                <div class="mobile-nav-item" onclick="closeMobileNav(); openTopupModal()"><i class="fa-solid fa-wallet"></i> เติมเงิน</div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section id="home" class="flex flex-col items-center px-6 relative overflow-hidden pt-36 pb-10">
+            <div class="text-center z-10 flex flex-col items-center">
+                <div class="reveal-container mb-4">
+                    <span class="reveal-item text-[11px] font-bold text-secondary uppercase tracking-[8px]">WELCOME</span>
+                </div>
+                <div class="reveal-container">
+                    <h1 class="reveal-item hero-title" data-shop-name>VALEN HUB</h1>
+                </div>
+                <div class="reveal-container">
+                    <h1 class="reveal-item hero-title text-white/10" style="-webkit-text-stroke: 1px rgba(255,255,255,0.08);"></h1>
+                </div>
+
+                <div class="mt-8 text-secondary max-w-lg mx-auto text-sm font-medium leading-relaxed">
+                    <p data-shop-tagline>ร้านแจกไอดีเกม & รหัสเกมฟรี ไม่ต้องเติมเงิน</p>
+                </div>
+
+                <div class="mt-10 flex flex-wrap justify-center gap-5 opacity-0" id="hero-btns">
+                    <div onclick="goTo('#shop')" class="btn-main !px-10 !py-4"><i class="fa-solid fa-store"></i> ดูสินค้าทั้งหมด</div>
+                    <div onclick="openTopupModal()" class="btn-outline !px-10 !py-4"><i class="fa-solid fa-wallet"></i> เติมเงิน (ไม่จำเป็น)</div>
+                </div>
+
+                <div class="hero-stats-grid" id="shop-stats-grid" data-aos="fade-up" data-aos-delay="150"></div>
+            </div>
+        </section>
+
+        <section id="shop" class="pt-10 pb-24 px-6 max-w-6xl mx-auto" style="scroll-margin-top: 110px;">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-8 gap-8">
+                <div data-aos="fade-right">
+                    <div class="text-white/30 text-[9px] font-black uppercase tracking-[6px] mb-3">สินค้าทั้งหมด</div>
+                    <h2 class="text-4xl font-black uppercase tracking-tighter leading-none"><br>Category<span class="text-white/20"></span></h2>
+                </div>
+            </div>
+
+            <div class="ticker-heading" data-aos="fade-up">
+                <span class="ticker-heading-th">รายการรับสินค้าล่าสุด</span>
+                <span class="ticker-heading-en">Latest free claims</span>
+            </div>
+            <div class="live-ticker-wrap is-empty" id="live-ticker-wrap" data-aos="fade-up">
+                <div class="live-ticker-track" id="live-ticker-track"></div>
+            </div>
+
+            <div class="cat-banner-grid" id="cat-banner-grid" data-aos="fade-up"></div>
+
+            <div class="products-section" id="products-section" data-aos="fade-up">
+                <div class="products-section-head">
+                    <div class="products-section-title"><i class="fa-solid fa-bag-shopping"></i> สินค้าฟรีทั้งหมด</div>
+                    <div class="active-cat-row" id="active-cat-row"></div>
+                </div>
+
+                <div class="products-grid" id="products-grid">
+                    <div class="scripts-empty"><i class="fa-solid fa-spinner fa-spin"></i>กำลังโหลดสินค้า...</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer id="site-footer">
+        <div class="footer-inner">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <div class="footer-brand-name"><span data-shop-logo-slot></span><span data-shop-name>VALEN HUB</span></div>
+                    <p data-shop-tagline class="footer-tagline">ร้านแจกไอดีเกม &amp; รหัสเกมฟรี ไม่ต้องเติมเงิน</p>
+                </div>
+
+                <div id="admin-presence" style="display:none;">
+                    <div class="presence-avatar-wrap">
+                        <img id="presence-avatar" src="" alt="owner">
+                        <span class="status-badge" id="presence-status-dot"></span>
+                    </div>
+                    <div class="presence-info">
+                        <b id="presence-name">—</b>
+                        <span id="presence-activity" class="presence-activity">
+                            <i class="fa-solid fa-circle-notch fa-spin"></i> กำลังเชื่อมต่อ...
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="social-links-row" id="social-links-row"></div>
+                <div class="footer-copy">© <span id="footer-year"></span> <span data-shop-name>VALEN HUB</span>. </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- โมดอลเติมเงิน (เก็บไว้ เผื่อใช้ภายหลัง) -->
+    <div id="topup-overlay" class="admin-overlay">
+        <!-- ... เหมือนเดิม ... -->
+    </div>
+
+    <!-- ★ โมดอลรับสินค้าฟรี ★ -->
+    <div id="buy-overlay" class="admin-overlay">
+        <div class="admin-panel" style="max-width:420px;">
+            <div class="admin-panel-head">
+                <div><h3>🎁 รับสินค้าฟรี</h3><p>กดยืนยันเพื่อรับสินค้าทันที</p></div>
+                <div class="admin-close" onclick="closeBuyModal()"><i class="fa-solid fa-xmark"></i></div>
+            </div>
+            <div class="admin-list-row">
+                <div class="info"><b id="buy-product-name"></b><span id="buy-qty-stock-hint">มีสินค้าเหลือ 0 ชิ้น</span></div>
+                <div class="product-price" style="color:#4ade80;">🎉 ฟรี</div>
+            </div>
+
+            <div class="buy-qty-row">
+                <label>จำนวนที่ต้องการรับ</label>
+                <div class="qty-stepper">
+                    <button type="button" id="buy-qty-minus" class="qty-step-btn" onclick="changeBuyQuantity(-1)"><i class="fa-solid fa-minus"></i></button>
+                    <input type="number" id="buy-qty-input" min="1" value="1" oninput="setBuyQuantityFromInput()">
+                    <button type="button" id="buy-qty-plus" class="qty-step-btn" onclick="changeBuyQuantity(1)"><i class="fa-solid fa-plus"></i></button>
+                </div>
+            </div>
+
+            <div class="buy-total-row">
+                <span>ยอดที่ต้องชำระ</span>
+                <b id="buy-product-total" class="product-price" style="color:#4ade80;">ฟรี</b>
+            </div>
+
+            <div class="admin-error" id="buy-error"></div>
+            <button class="admin-submit-btn" onclick="confirmPurchase()" style="background:#4ade80; color:#000; font-weight:bold;">
+                <i class="fa-solid fa-gift"></i> รับสินค้าฟรี
+            </button>
+        </div>
+    </div>
+
+    <!-- โมดอลอื่น ๆ  (detail, history, admin, ฯลฯ) – คงเดิม ไม่ต้องเปลี่ยน -->
+    <!-- … (ใส่โค้ดเดิมตรงนี้) … -->
+
+    <!-- สคริปต์เดิม (firebase, auth, ฯลฯ) -->
+    <script src="firebase-init.js"></script>
+    <script src="auth.js"></script>
+    <script src="promptpay.js"></script>
+    <script src="shop.js"></script>  <!-- ยังคงโหลด แต่เราจะ override ข้างล่าง -->
+    <script src="discord-presence.js"></script>
+    <script src="main.js"></script>
+    <script src="discord-emoji.js"></script>
+
+    <!-- ★ สคริปต์ override ทำให้ร้านฟรี ★ -->
+    <script>
+        (function() {
+            // รอให้ Firebase และ DOM พร้อม
+            window.addEventListener('DOMContentLoaded', function() {
+                // Override openBuyModal (มาจาก shop.js)
+                const originalOpenBuyModal = window.openBuyModal;
+                window.openBuyModal = function(productId) {
+                    if (!firebase.auth().currentUser) {
+                        alert('กรุณาเข้าสู่ระบบก่อนรับสินค้า');
+                        return;
+                    }
+                    // เรียกฟังก์ชันเดิมเพื่อดึงข้อมูลสินค้า แต่เราจะเปลี่ยน modal content เอง
+                    const product = window.allProducts?.find(p => p.id === productId);
+                    if (!product) return;
+
+                    document.getElementById('buy-product-name').textContent = product.name;
+                    document.getElementById('buy-qty-stock-hint').textContent = `มีสินค้าเหลือ ${product.stock || 0} ชิ้น`;
+                    document.getElementById('buy-product-total').textContent = 'ฟรี';
+                    document.getElementById('buy-qty-input').value = 1;
+                    document.getElementById('buy-error').textContent = '';
+                    document.getElementById('buy-overlay').style.display = 'flex';
+                    window.currentBuyProductId = productId;
+                    window.currentBuyProductPrice = 0; // ราคาเป็น 0
+                    window.currentBuyProductName = product.name;
+                };
+
+                // Override confirmPurchase → ไม่ตัดเงิน แจกฟรี
+                window.confirmPurchase = async function() {
+                    const user = firebase.auth().currentUser;
+                    if (!user) {
+                        document.getElementById('buy-error').textContent = 'กรุณาเข้าสู่ระบบก่อน';
+                        return;
+                    }
+
+                    const productId = window.currentBuyProductId;
+                    if (!productId) return;
+
+                    const qty = parseInt(document.getElementById('buy-qty-input').value) || 1;
+                    if (qty <= 0) {
+                        document.getElementById('buy-error').textContent = 'จำนวนต้องมากกว่า 0';
+                        return;
+                    }
+
+                    const db = firebase.firestore();
+                    const productRef = db.collection('products').doc(productId);
+
+                    try {
+                        // ดึงสต็อก qty ชิ้น
+                        const stockSnap = await productRef.collection('stock').limit(qty).get();
+                        if (stockSnap.size < qty) {
+                            document.getElementById('buy-error').textContent = 'สินค้าในสต็อกไม่เพียงพอ';
+                            return;
+                        }
+
+                        const stockItems = [];
+                        stockSnap.forEach(doc => stockItems.push({ id: doc.id, ...doc.data() }));
+
+                        // ลบสต็อกที่ใช้ไป
+                        const batch = db.batch();
+                        stockItems.forEach(item => batch.delete(productRef.collection('stock').doc(item.id)));
+
+                        // บันทึกประวัติการรับ (orders)
+                        const orderData = {
+                            userId: user.uid,
+                            userName: user.displayName || 'ผู้ใช้',
+                            productId: productId,
+                            productName: window.currentBuyProductName || '',
+                            quantity: qty,
+                            price: 0, // ฟรี
+                            total: 0,
+                            items: stockItems.map(i => i.code || i.data || ''),
+                            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                        };
+                        batch.set(db.collection('orders').doc(), orderData);
+
+                        await batch.commit();
+
+                        // ปิด modal
+                        document.getElementById('buy-overlay').style.display = 'none';
+                        alert(`✅ ได้รับสินค้า "${window.currentBuyProductName}" จำนวน ${qty} ชิ้นเรียบร้อย!`);
+                        // รีเฟรชรายการสินค้า
+                        if (typeof window.fetchProducts === 'function') {
+                            window.fetchProducts();
+                        }
+                    } catch (err) {
+                        console.error(err);
+                        document.getElementById('buy-error').textContent = 'เกิดข้อผิดพลาด: ' + err.message;
+                    }
+                };
+
+                // Override แสดงผลราคาให้เป็น "ฟรี" ตลอด
+                // ถ้า shop.js มีฟังก์ชัน renderProductCard เราจะ override
+                if (window.renderProductCard) {
+                    const origRender = window.renderProductCard;
+                    window.renderProductCard = function(product) {
+                        origRender(product);
+                        // เปลี่ยนป้ายราคาใน card ที่เพิ่งเพิ่ม
+                        const cards = document.querySelectorAll('.product-card');
+                        const lastCard = cards[cards.length - 1];
+                        if (lastCard) {
+                            const priceEl = lastCard.querySelector('.product-price');
+                            if (priceEl) {
+                                priceEl.innerHTML = '<span style="color:#4ade80;">🎉 ฟรี</span>';
+                            }
+                        }
+                    };
+                } else {
+                    // ถ้าไม่มีฟังก์ชันนั้น คอยสังเกต DOM
+                    const observer = new MutationObserver(() => {
+                        document.querySelectorAll('.product-price').forEach(el => {
+                            if (!el.dataset.freePatched) {
+                                el.innerHTML = '<span style="color:#4ade80;">🎉 ฟรี</span>';
+                                el.dataset.freePatched = '1';
+                            }
+                        });
+                    });
+                    observer.observe(document.getElementById('products-grid') || document.body, { childList: true, subtree: true });
+                }
+
+                console.log('✅ ร้านถูกเปลี่ยนเป็นโหมดฟรีเรียบร้อย');
+            });
+        })();
+    </script>
+</body>
+                  </html>
