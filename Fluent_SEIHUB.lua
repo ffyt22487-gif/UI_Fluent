@@ -42,21 +42,22 @@ local Themes = {
 		"Cloud",
 		"Grape",
 		"Bloody",
-		"Arctic"
+		"Arctic",
+		"SEI"
 	},
 	Dark = {
 		Name = "Dark",
 		Accent = Color3.fromRGB(96, 205, 255),
-		AcrylicMain = Color3.fromRGB(50, 50, 50),
-		AcrylicBorder = Color3.fromRGB(100, 100, 100),
-		AcrylicGradient = ColorSequence.new(Color3.fromRGB(35, 35, 35), Color3.fromRGB(35, 35, 35)),
+		AcrylicMain = Color3.fromRGB(42, 42, 45),
+		AcrylicBorder = Color3.fromRGB(85, 85, 90),
+		AcrylicGradient = ColorSequence.new(Color3.fromRGB(30, 30, 33), Color3.fromRGB(30, 30, 33)),
 		AcrylicNoise = 0.9,
 		TitleBarLine = Color3.fromRGB(90, 90, 90),
 		Tab = Color3.fromRGB(200, 200, 200),
 		Element = Color3.fromRGB(180, 180, 180),
 		ElementBorder = Color3.fromRGB(45, 45, 45),
 		InElementBorder = Color3.fromRGB(100, 100, 100),
-		ElementTransparency = 0.87,
+		ElementTransparency = 0.85,
 		ToggleSlider = Color3.fromRGB(180, 180, 180),
 		ToggleToggled = Color3.fromRGB(42, 42, 42),
 		SliderRail = Color3.fromRGB(180, 180, 180),
@@ -747,12 +748,51 @@ local Themes = {
 		SubText = Color3.fromRGB(155, 175, 195),
 		Hover = Color3.fromRGB(90, 140, 180),
 		HoverChange = 0.04
-	}
+
+	},
+	SEI = {
+		Name = "SEI",
+		Accent = Color3.fromRGB(82, 182, 255),
+		AcrylicMain = Color3.fromRGB(44, 46, 52),
+		AcrylicBorder = Color3.fromRGB(70, 72, 80),
+		AcrylicGradient = ColorSequence.new(Color3.fromRGB(38, 40, 46), Color3.fromRGB(42, 44, 50)),
+		AcrylicNoise = 0.94,
+		TitleBarLine = Color3.fromRGB(65, 67, 75),
+		Tab = Color3.fromRGB(90, 95, 108),
+		Element = Color3.fromRGB(65, 68, 76),
+		ElementBorder = Color3.fromRGB(55, 58, 66),
+		InElementBorder = Color3.fromRGB(72, 75, 85),
+		ElementTransparency = 0.88,
+		ToggleSlider = Color3.fromRGB(100, 105, 118),
+		ToggleToggled = Color3.fromRGB(38, 40, 46),
+		SliderRail = Color3.fromRGB(100, 105, 118),
+		DropdownFrame = Color3.fromRGB(110, 115, 130),
+		DropdownHolder = Color3.fromRGB(42, 44, 50),
+		DropdownBorder = Color3.fromRGB(55, 58, 66),
+		DropdownOption = Color3.fromRGB(95, 100, 115),
+		Keybind = Color3.fromRGB(95, 100, 115),
+		Input = Color3.fromRGB(100, 105, 118),
+		InputFocused = Color3.fromRGB(28, 30, 35),
+		InputIndicator = Color3.fromRGB(120, 125, 140),
+		InputIndicatorFocus = Color3.fromRGB(82, 182, 255),
+		Dialog = Color3.fromRGB(48, 50, 58),
+		DialogHolder = Color3.fromRGB(42, 44, 50),
+		DialogHolderLine = Color3.fromRGB(36, 38, 44),
+		DialogButton = Color3.fromRGB(48, 50, 58),
+		DialogButtonBorder = Color3.fromRGB(70, 72, 82),
+		DialogBorder = Color3.fromRGB(65, 68, 78),
+		DialogInput = Color3.fromRGB(55, 58, 68),
+		DialogInputLine = Color3.fromRGB(110, 115, 130),
+		Text = Color3.fromRGB(215, 218, 225),
+		SubText = Color3.fromRGB(155, 160, 170),
+		Hover = Color3.fromRGB(90, 95, 108),
+		HoverChange = 0.05
+		}
 
 }
 
 local Library = {
-	Version = "1.2.2",
+	Version = "1.2.2-BEAUTIFUL",
 
 	OpenFrames = {},
 	Options = {},
@@ -2040,7 +2080,7 @@ function AcrylicPaint()
 			}),
 
 			New("UICorner", {
-				CornerRadius = UDim.new(0, 8),
+				CornerRadius = UDim.new(0, 12),
 			}),
 
 			New("Frame", {
@@ -2052,7 +2092,7 @@ function AcrylicPaint()
 				},
 			}, {
 				New("UICorner", {
-					CornerRadius = UDim.new(0, 8),
+					CornerRadius = UDim.new(0, 12),
 				}),
 			}),
 
@@ -2062,7 +2102,7 @@ function AcrylicPaint()
 				Size = UDim2.fromScale(1, 1),
 			}, {
 				New("UICorner", {
-					CornerRadius = UDim.new(0, 8),
+					CornerRadius = UDim.new(0, 12),
 				}),
 
 				New("UIGradient", {
@@ -2082,7 +2122,7 @@ function AcrylicPaint()
 				BackgroundTransparency = 1,
 			}, {
 				New("UICorner", {
-					CornerRadius = UDim.new(0, 8),
+					CornerRadius = UDim.new(0, 12),
 				}),
 			}),
 
@@ -2098,7 +2138,7 @@ function AcrylicPaint()
 				},
 			}, {
 				New("UICorner", {
-					CornerRadius = UDim.new(0, 8),
+					CornerRadius = UDim.new(0, 12),
 				}),
 			}),
 
@@ -2108,7 +2148,7 @@ function AcrylicPaint()
 				ZIndex = 2,
 			}, {
 				New("UICorner", {
-					CornerRadius = UDim.new(0, 8),
+					CornerRadius = UDim.new(0, 12),
 				}),
 				New("UIStroke", {
 					Transparency = 0.5,
@@ -2203,10 +2243,10 @@ Components.Element = (function()
 		local Options = Options or {}
 
 		Element.TitleLabel = New("TextLabel", {
-			FontFace = Font.new("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.Medium, Enum.FontStyle.Normal),
+			FontFace = Font.new("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.SemiBold, Enum.FontStyle.Normal),
 			Text = Title,
 			TextColor3 = Color3.fromRGB(240, 240, 240),
-			TextSize = 13,
+			TextSize = 14,
 			TextXAlignment = Enum.TextXAlignment.Left,
 			Size = UDim2.new(1, 0, 0, 14),
 			BackgroundColor3 = Color3.fromRGB(255, 255, 255),
@@ -2288,7 +2328,7 @@ Components.Element = (function()
 		})
 
 		Element.Border = New("UIStroke", {
-			Transparency = 0.5,
+			Transparency = 0.3,
 			ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
 			Color = Color3.fromRGB(0, 0, 0),
 			ThemeTag = {
@@ -2299,7 +2339,7 @@ Components.Element = (function()
 		Element.Frame = New("TextButton", {
 			Visible = Options.Visible and Options.Visible or true,
 			Size = UDim2.new(1, 0, 0, 0),
-			BackgroundTransparency = 0.89,
+			BackgroundTransparency = 0.87,
 			BackgroundColor3 = Color3.fromRGB(130, 130, 130),
 			Parent = Parent,
 			AutomaticSize = Enum.AutomaticSize.Y,
@@ -2311,7 +2351,7 @@ Components.Element = (function()
 			},
 		}, {
 			New("UICorner", {
-				CornerRadius = UDim.new(0, 4),
+				CornerRadius = UDim.new(0, 8),
 			}),
 			Element.Border,
 			Element.LabelHolder,
@@ -2475,7 +2515,7 @@ Components.Section = (function()
 		local Section = {}
 
 		Section.Layout = New("UIListLayout", {
-			Padding = UDim.new(0, 5),
+			Padding = UDim.new(0, 7),
 		})
 
 		Section.Container = New("Frame", {
@@ -2613,7 +2653,7 @@ Components.Tab = (function()
 			},
 		}, {
 			New("UICorner", {
-				CornerRadius = UDim.new(0, 6),
+				CornerRadius = UDim.new(0, 10),
 			}),
 			New("TextLabel", {
 				AnchorPoint = Vector2.new(0, 0.5),
@@ -2624,7 +2664,7 @@ Components.Tab = (function()
 				TextTransparency = 0,
 				FontFace = Font.new(
 					"rbxasset://fonts/families/GothamSSm.json",
-					Enum.FontWeight.Regular,
+					Enum.FontWeight.Medium,
 					Enum.FontStyle.Normal
 				),
 				TextSize = 12,
@@ -2651,7 +2691,7 @@ Components.Tab = (function()
 		})
 
 		local ContainerLayout = New("UIListLayout", {
-			Padding = UDim.new(0, 5),
+			Padding = UDim.new(0, 7),
 			SortOrder = Enum.SortOrder.LayoutOrder,
 		})
 
@@ -2711,7 +2751,7 @@ Components.Tab = (function()
 		Tab.Motor, Tab.SetTransparency = Creator.SpringMotor(0.92, Tab.Frame, "BackgroundTransparency")
 
 		Creator.AddSignal(Tab.Frame.MouseEnter, function()
-			Tab.SetTransparency(Tab.Selected and 0.85 or 0.87)
+			Tab.SetTransparency(Tab.Selected and 0.82 or 0.87)
 		end)
 		Creator.AddSignal(Tab.Frame.MouseLeave, function()
 			Tab.SetTransparency(Tab.Selected and 0.89 or 0.92)
@@ -2808,7 +2848,7 @@ Components.Tab = (function()
 				},
 			}, {
 				New("UICorner", {
-					CornerRadius = UDim.new(0, 6),
+					CornerRadius = UDim.new(0, 10),
 				}),
 				New("UIStroke", {
 					Transparency = 1,
@@ -2844,8 +2884,8 @@ Components.Tab = (function()
 					RichText = true,
 					TextColor3 = Color3.fromRGB(255, 255, 255),
 					TextTransparency = 0,
-					FontFace = Font.new("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.Regular, Enum.FontStyle.Normal),
-					TextSize = 12,
+					FontFace = Font.new("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.Medium, Enum.FontStyle.Normal),
+					TextSize = 13,
 					TextXAlignment = "Left",
 					TextYAlignment = "Center",
 					Size = UDim2.new(0, 0, 1, 0),
@@ -2877,7 +2917,7 @@ Components.Tab = (function()
 				TopImage = "rbxassetid://6276641225",
 				ScrollBarImageColor3 = Color3.fromRGB(255, 255, 255),
 				ScrollBarImageTransparency = 0.95,
-				ScrollBarThickness = 3,
+				ScrollBarThickness = 4,
 				BorderSizePixel = 0,
 				CanvasSize = UDim2.fromScale(0, 0),
 				ScrollingDirection = Enum.ScrollingDirection.Y,
@@ -3174,7 +3214,7 @@ Components.Tab = (function()
 			TabObject.SetTransparency(0.92)
 			TabObject.Selected = false
 		end
-		TabModule.Tabs[Tab].SetTransparency(0.89)
+		TabModule.Tabs[Tab].SetTransparency(0.86)
 		TabModule.Tabs[Tab].Selected = true
 
 		Window.TabDisplay.Text = TabModule.Tabs[Tab].Name
@@ -3310,7 +3350,7 @@ Components.Button = (function()
 			},
 		}, {
 			New("UICorner", {
-				CornerRadius = UDim.new(0, 4),
+				CornerRadius = UDim.new(0, 8),
 			}),
 		})
 
@@ -3322,7 +3362,7 @@ Components.Button = (function()
 			},
 		}, {
 			New("UICorner", {
-				CornerRadius = UDim.new(0, 4),
+				CornerRadius = UDim.new(0, 8),
 			}),
 			New("UIStroke", {
 				ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
@@ -3378,7 +3418,7 @@ Components.Dialog = (function()
 			Parent = Dialog.Window.Root,
 		}, {
 			New("UICorner", {
-				CornerRadius = UDim.new(0, 8),
+				CornerRadius = UDim.new(0, 12),
 			}),
 		})
 
@@ -3417,12 +3457,12 @@ Components.Dialog = (function()
 		NewDialog.Title = New("TextLabel", {
 			FontFace = Font.new(
 				"rbxasset://fonts/families/GothamSSm.json",
-				Enum.FontWeight.SemiBold,
+				Enum.FontWeight.Bold,
 				Enum.FontStyle.Normal
 			),
 			Text = "Dialog",
 			TextColor3 = Color3.fromRGB(240, 240, 240),
-			TextSize = 22,
+			TextSize = 24,
 			TextXAlignment = Enum.TextXAlignment.Left,
 			Size = UDim2.new(1, 0, 0, 22),
 			Position = UDim2.fromOffset(20, 25),
@@ -3450,7 +3490,7 @@ Components.Dialog = (function()
 			},
 		}, {
 			New("UICorner", {
-				CornerRadius = UDim.new(0, 8),
+				CornerRadius = UDim.new(0, 12),
 			}),
 			New("UIStroke", {
 				Transparency = 0.5,
@@ -3551,13 +3591,13 @@ Components.Notification = (function()
 		NewNotification.AcrylicPaint = Acrylic.AcrylicPaint()
 
 		NewNotification.Title = New("TextLabel", {
-			Position = UDim2.new(0, 14, 0, 17),
+			Position = UDim2.new(0, 16, 0, 18),
 			Text = Config.Title,
 			RichText = true,
 			TextColor3 = Color3.fromRGB(255, 255, 255),
 			TextTransparency = 0,
-			FontFace = Font.new("rbxasset://fonts/families/GothamSSm.json"),
-			TextSize = 13,
+			FontFace = Font.new("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.SemiBold, Enum.FontStyle.Normal),
+			TextSize = 14,
 			TextXAlignment = "Left",
 			TextYAlignment = "Center",
 			Size = UDim2.new(1, -12, 0, 12),
@@ -3802,7 +3842,7 @@ Components.Textbox = (function()
 			},
 		}, {
 			New("UICorner", {
-				CornerRadius = UDim.new(0, 4),
+				CornerRadius = UDim.new(0, 8),
 			}),
 			New("UIStroke", {
 				ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
@@ -3906,7 +3946,7 @@ Components.TitleBar = (function()
 				},
 			}, {
 				New("UICorner", {
-					CornerRadius = UDim.new(0, 7),
+					CornerRadius = UDim.new(0, 12),
 				}),
 				New("ImageLabel", {
 					Image = Icon,
@@ -3984,10 +4024,10 @@ Components.TitleBar = (function()
 					Text = Config.Title,
 					FontFace = Font.new(
 						"rbxasset://fonts/families/GothamSSm.json",
-						Enum.FontWeight.Regular,
+						Enum.FontWeight.SemiBold,
 						Enum.FontStyle.Normal
 					),
-					TextSize = 12,
+					TextSize = 13,
 					TextXAlignment = "Left",
 					TextYAlignment = "Center",
 					Size = UDim2.fromScale(0, 1),
@@ -4007,7 +4047,7 @@ Components.TitleBar = (function()
 						Enum.FontWeight.Regular,
 						Enum.FontStyle.Normal
 					),
-					TextSize = 12,
+					TextSize = 11,
 					TextXAlignment = "Left",
 					TextYAlignment = "Center",
 					Size = UDim2.fromScale(0, 1),
@@ -4021,7 +4061,7 @@ Components.TitleBar = (function()
 
 			}),
 			New("Frame", {
-				BackgroundTransparency = 0.5,
+				BackgroundTransparency = 0.6,
 				Size = UDim2.new(1, 0, 0, 1),
 				Position = UDim2.new(0, 0, 1, 0),
 				ThemeTag = {
@@ -4046,13 +4086,11 @@ Components.TitleBar = (function()
 				},
 			})
 		end)
+		TitleBar.CloseButton.Frame.Visible = false
 		TitleBar.MaxButton = BarButton(Components.Assets.Max, UDim2.new(1, -40, 0, 4), TitleBar.Frame, function()
 			Config.Window.Maximize(not Config.Window.Maximized)
 		end)
-		TitleBar.MinButton = BarButton(Components.Assets.Min, UDim2.new(1, -80, 0, 4), TitleBar.Frame, function()
-			Library.Window:Minimize()
-		end)
-
+		TitleBar.MaxButton.Frame.Visible = false
 		return TitleBar
 	end
 end)()
@@ -4102,7 +4140,7 @@ Components.Window = (function()
 			},
 		}, {
 			New("UICorner", {
-				CornerRadius = UDim.new(0, 9),
+				CornerRadius = UDim.new(0, 12),
 			}),
 		})
 
@@ -4352,7 +4390,7 @@ Components.Window = (function()
 			ScaleType = Enum.ScaleType.Fit,
 		}, {
 			New("UICorner", {
-				CornerRadius = UDim.new(0, 6),
+				CornerRadius = UDim.new(0, 10),
 			}),
 		}) or nil
 
@@ -4391,14 +4429,14 @@ Components.Window = (function()
 			ScrollingDirection = Enum.ScrollingDirection.Y,
 		}, {
 			New("UIListLayout", {
-				Padding = UDim.new(0, 4),
+				Padding = UDim.new(0, 6),
 			}),
 		})
 
 		local SearchFrame = New("Frame", {
 			Size = UDim2.new(1, 0, 0, 28),
 			Position = UDim2.new(0, 0, 0, searchOffset),
-			BackgroundTransparency = 0.7,
+			BackgroundTransparency = 0.6,
 			ZIndex = 10,
 			Visible = Window.ShowSearch,
 			BackgroundColor3 = Color3.fromRGB(20, 20, 20),
@@ -4407,7 +4445,7 @@ Components.Window = (function()
 			},
 		}, {
 			New("UICorner", {
-				CornerRadius = UDim.new(0, 4),
+				CornerRadius = UDim.new(0, 8),
 			}),
 		})
 
@@ -4494,8 +4532,8 @@ Components.Window = (function()
 			RichText = true,
 			Text = "Tab",
 			TextTransparency = 0,
-			FontFace = Font.new("rbxassetid://12187365364", Enum.FontWeight.SemiBold, Enum.FontStyle.Normal),
-			TextSize = 28,
+			FontFace = Font.new("rbxassetid://12187365364", Enum.FontWeight.Bold, Enum.FontStyle.Normal),
+			TextSize = 32,
 			TextXAlignment = "Left",
 			TextYAlignment = "Center",
 			Size = UDim2.new(1, -16, 0, 28),
@@ -4553,7 +4591,7 @@ Components.Window = (function()
 				ScaleType = Enum.ScaleType.Stretch,
 			}, {
 				New("UICorner", {
-					CornerRadius = UDim.new(0, 8),
+					CornerRadius = UDim.new(0, 12),
 				}),
 			})
 			Window.BackgroundImage = BackgroundImageFrame
@@ -4819,7 +4857,7 @@ Components.Window = (function()
 		end)
 
 		Window.SelectorSizeMotor:onStep(function(Value)
-			Selector.Size = UDim2.new(0, 4, 0, Value)
+			Selector.Size = UDim2.new(0, 5, 0, Value)
 		end)
 
 		Window.ContainerBackMotor:onStep(function(Value)
@@ -5068,7 +5106,7 @@ Components.Window = (function()
 					Parent = Window.Root,
 				}, {
 					New("UICorner", {
-						CornerRadius = UDim.new(0, 8),
+						CornerRadius = UDim.new(0, 12),
 					}),
 				})
 				Window.BackgroundImage = BackgroundImageFrame
@@ -5257,33 +5295,35 @@ ElementsTable.Toggle = (function()
 		}
 
 		local ToggleFrame = Components.Element(Config.Title, Config.Description, self.Container, true, Config)
-		ToggleFrame.DescLabel.Size = UDim2.new(1, -54, 0, 14)
+		ToggleFrame.DescLabel.Size = UDim2.new(1, -36, 0, 14)
 
 		Toggle.SetTitle = ToggleFrame.SetTitle
 		Toggle.SetDesc = ToggleFrame.SetDesc
 		Toggle.Visible = ToggleFrame.Visible
 		Toggle.Elements = ToggleFrame
 
-		local ToggleCircle = New("ImageLabel", {
-			AnchorPoint = Vector2.new(0, 0.5),
-			Size = UDim2.fromOffset(14, 14),
-			Position = UDim2.new(0, 2, 0.5, 0),
-			Image = "http://www.roblox.com/asset/?id=12266946128",
-			ImageTransparency = 0.5,
-			ThemeTag = {
-				ImageColor3 = "ToggleSlider",
-			},
-		})
-
-		local ToggleBorder = New("UIStroke", {
-			Transparency = 0.5,
+		local CheckBorder = New("UIStroke", {
+			Thickness = 1.5,
+			Transparency = 0,
 			ThemeTag = {
 				Color = "ToggleSlider",
 			},
 		})
 
+		local CheckMark = New("ImageLabel", {
+			AnchorPoint = Vector2.new(0.5, 0.5),
+			Size = UDim2.fromOffset(15, 15),
+			Position = UDim2.fromScale(0.5, 0.5),
+			Image = "rbxassetid://10709790644",
+			BackgroundTransparency = 1,
+			ImageTransparency = 1,
+			ThemeTag = {
+				ImageColor3 = "ToggleToggled",
+			},
+		})
+
 		local ToggleSlider = New("Frame", {
-			Size = UDim2.fromOffset(36, 18),
+			Size = UDim2.fromOffset(18, 18),
 			AnchorPoint = Vector2.new(1, 0.5),
 			Position = UDim2.new(1, -10, 0.5, 0),
 			Parent = ToggleFrame.Frame,
@@ -5293,10 +5333,10 @@ ElementsTable.Toggle = (function()
 			},
 		}, {
 			New("UICorner", {
-				CornerRadius = UDim.new(0, 9),
+				CornerRadius = UDim.new(0, 4),
 			}),
-			ToggleBorder,
-			ToggleCircle,
+			CheckBorder,
+			CheckMark,
 		})
 
 		function Toggle:OnChanged(Func)
@@ -5308,19 +5348,31 @@ ElementsTable.Toggle = (function()
 			Value = not not Value
 			Toggle.Value = Value
 
-			Creator.OverrideTag(ToggleBorder, { Color = Toggle.Value and "Accent" or "ToggleSlider" })
-			Creator.OverrideTag(ToggleCircle, { ImageColor3 = Toggle.Value and "ToggleToggled" or "ToggleSlider" })
-			TweenService:Create(
-				ToggleCircle,
-				TweenInfo.new(0.25, Enum.EasingStyle.Quint, Enum.EasingDirection.Out),
-				{ Position = UDim2.new(0, Toggle.Value and 19 or 2, 0.5, 0) }
-			):Play()
-			TweenService:Create(
-				ToggleSlider,
-				TweenInfo.new(0.25, Enum.EasingStyle.Quint, Enum.EasingDirection.Out),
-				{ BackgroundTransparency = Toggle.Value and 0.45 or 1 }
-			):Play()
-			ToggleCircle.ImageTransparency = Toggle.Value and 0 or 0.5
+			if Toggle.Value then
+				Creator.OverrideTag(CheckBorder, { Color = "Accent" })
+				TweenService:Create(
+					ToggleSlider,
+					TweenInfo.new(0.15, Enum.EasingStyle.Quint, Enum.EasingDirection.Out),
+					{ BackgroundTransparency = 0 }
+				):Play()
+				TweenService:Create(
+					CheckMark,
+					TweenInfo.new(0.15, Enum.EasingStyle.Quint, Enum.EasingDirection.Out),
+					{ ImageTransparency = 0 }
+				):Play()
+			else
+				Creator.OverrideTag(CheckBorder, { Color = "ToggleSlider" })
+				TweenService:Create(
+					ToggleSlider,
+					TweenInfo.new(0.15, Enum.EasingStyle.Quint, Enum.EasingDirection.Out),
+					{ BackgroundTransparency = 1 }
+				):Play()
+				TweenService:Create(
+					CheckMark,
+					TweenInfo.new(0.15, Enum.EasingStyle.Quint, Enum.EasingDirection.Out),
+					{ ImageTransparency = 1 }
+				):Play()
+			end
 
 			Library:SafeCallback(Toggle.Callback, Toggle.Value)
 			Library:SafeCallback(Toggle.Changed, Toggle.Value)
@@ -5436,7 +5488,7 @@ ElementsTable.Dropdown = (function()
 			},
 		}, {
 			New("UICorner", {
-				CornerRadius = UDim.new(0, 5),
+				CornerRadius = UDim.new(0, 8),
 			}),
 			New("UIStroke", {
 				Transparency = 0.5,
@@ -5558,7 +5610,7 @@ ElementsTable.Dropdown = (function()
 			SearchBar,
 			DropdownScrollFrame,
 			New("UICorner", {
-				CornerRadius = UDim.new(0, 7),
+				CornerRadius = UDim.new(0, 12),
 			}),
 			New("UIStroke", {
 				ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
@@ -6009,7 +6061,7 @@ ElementsTable.Dropdown = (function()
 					},
 				}, {
 					New("UICorner", {
-						CornerRadius = UDim.new(0, 2),
+						CornerRadius = UDim.new(0, 4),
 					}),
 				})
 
@@ -6043,7 +6095,7 @@ ElementsTable.Dropdown = (function()
 					ButtonSelector,
 					ButtonLabel,
 					New("UICorner", {
-						CornerRadius = UDim.new(0, 6),
+						CornerRadius = UDim.new(0, 10),
 					}),
 				})
 
@@ -6345,7 +6397,7 @@ ElementsTable.Slider = (function()
 			},
 		}, {
 			New("UICorner", {
-				CornerRadius = UDim.new(0, 3),
+				CornerRadius = UDim.new(0, 6),
 			}),
 			New("UIStroke", {
 				ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
@@ -6660,7 +6712,7 @@ ElementsTable.Keybind = (function()
 			},
 		}, {
 			New("UICorner", {
-				CornerRadius = UDim.new(0, 5),
+				CornerRadius = UDim.new(0, 8),
 			}),
 			New("UIPadding", {
 				PaddingLeft = UDim.new(0, 8),
@@ -6843,7 +6895,7 @@ ElementsTable.Colorpicker = (function()
 			Parent = ColorpickerFrame.Frame,
 		}, {
 			New("UICorner", {
-				CornerRadius = UDim.new(0, 4),
+				CornerRadius = UDim.new(0, 8),
 			}),
 		})
 
@@ -6858,7 +6910,7 @@ ElementsTable.Colorpicker = (function()
 			TileSize = UDim2.fromOffset(40, 40),
 		}, {
 			New("UICorner", {
-				CornerRadius = UDim.new(0, 4),
+				CornerRadius = UDim.new(0, 8),
 			}),
 			DisplayFrameColor,
 		})
@@ -6922,7 +6974,7 @@ ElementsTable.Colorpicker = (function()
 				Parent = Dialog.Root,
 			}, {
 				New("UICorner", {
-					CornerRadius = UDim.new(0, 4),
+					CornerRadius = UDim.new(0, 8),
 				}),
 				SatCursor,
 			})
@@ -6933,7 +6985,7 @@ ElementsTable.Colorpicker = (function()
 				BackgroundTransparency = Colorpicker.Transparency,
 			}, {
 				New("UICorner", {
-					CornerRadius = UDim.new(0, 4),
+					CornerRadius = UDim.new(0, 8),
 				}),
 			})
 			local OldColorFrameChecker = New("ImageLabel", {
@@ -6947,7 +6999,7 @@ ElementsTable.Colorpicker = (function()
 				Parent = Dialog.Root,
 			}, {
 				New("UICorner", {
-					CornerRadius = UDim.new(0, 4),
+					CornerRadius = UDim.new(0, 8),
 				}),
 				New("UIStroke", {
 					Thickness = 2,
@@ -6962,7 +7014,7 @@ ElementsTable.Colorpicker = (function()
 				BackgroundTransparency = 0,
 			}, {
 				New("UICorner", {
-					CornerRadius = UDim.new(0, 4),
+					CornerRadius = UDim.new(0, 8),
 				}),
 			})
 
@@ -6977,7 +7029,7 @@ ElementsTable.Colorpicker = (function()
 				Parent = Dialog.Root,
 			}, {
 				New("UICorner", {
-					CornerRadius = UDim.new(0, 4),
+					CornerRadius = UDim.new(0, 8),
 				}),
 				New("UIStroke", {
 					Thickness = 2,
@@ -10646,7 +10698,7 @@ local MinimizeButton = New("TextButton", {
 		New("UICorner", {
 
 
-			CornerRadius = UDim.new(0, 8),
+			CornerRadius = UDim.new(0, 12),
 
 
 		}),
@@ -10655,46 +10707,6 @@ local MinimizeButton = New("TextButton", {
 	}),
 
 
-	New("ImageLabel", {
-
-
-		Image = "rbxassetid://10734897102",
-
-
-		Size = UDim2.new(0.8, 0, 0.8, 0),
-
-
-		Position = UDim2.new(0.5, 0, 0.5, 0),
-
-
-		AnchorPoint = Vector2.new(0.5, 0.5),
-
-
-		BackgroundTransparency = 1,
-
-
-		ImageColor3 = Color3.fromRGB(255, 255, 255),
-
-
-		ImageTransparency = 0.1,
-
-
-	}, {
-
-
-		New("UIAspectRatioConstraint", {
-
-
-			AspectRatio = 1,
-
-
-			AspectType = Enum.AspectType.FitWithinMaxSize,
-
-
-		})
-
-
-	})
 
 
 })
@@ -10793,7 +10805,7 @@ local MobileMinimizeButton = New("TextButton", {
 		New("UICorner", {
 
 
-			CornerRadius = UDim.new(0, 10),
+			CornerRadius = UDim.new(0, 14),
 
 
 		}),
@@ -10802,46 +10814,6 @@ local MobileMinimizeButton = New("TextButton", {
 	}),
 
 
-	New("ImageLabel", {
-
-
-		Image = "rbxassetid://10734897102",
-
-
-		Size = UDim2.new(0.8, 0, 0.8, 0),
-
-
-		Position = UDim2.new(0.5, 0, 0.5, 0),
-
-
-		AnchorPoint = Vector2.new(0.5, 0.5),
-
-
-		BackgroundTransparency = 1,
-
-
-		ImageColor3 = Color3.fromRGB(255, 255, 255),
-
-
-		ImageTransparency = 0.1,
-
-
-	}, {
-
-
-		New("UIAspectRatioConstraint", {
-
-
-			AspectRatio = 1,
-
-
-			AspectType = Enum.AspectType.FitWithinMaxSize,
-
-
-		})
-
-
-	})
 
 
 })
