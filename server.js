@@ -1,23 +1,23 @@
 const express = require("express");
-const cors = require("cors");
+const cors    = require("cors");
 
-const app = express();
+const app  = express();
 const PORT = process.env.PORT || 3000;
 
 // ============================================================
 // CONFIG (ตั้งค่าใน Render > Environment Variables)
 // ============================================================
-const TRW_API_KEY   = process.env.TRW_API_KEY;   // API key จริง
-const ACCESS_TOKEN  = process.env.ACCESS_TOKEN;   // token ที่คุณกำหนดเอง
+const TRW_API_KEY  = process.env.TRW_API_KEY;
+const ACCESS_TOKEN = process.env.ACCESS_TOKEN;
 
 // ============================================================
-// MIDDLEWARE
+// CORS — อนุญาตทุก origin แต่ยังต้องส่ง token ถูกต้อง
 // ============================================================
+app.use(cors({ origin: "*" }));
 app.use(express.json());
-app.use(cors({ origin: false })); // ปิด CORS คนอื่น
 
 // ============================================================
-// AUTH MIDDLEWARE — ต้องส่ง header: Authorization: Bearer <token>
+// AUTH MIDDLEWARE
 // ============================================================
 function requireAuth(req, res, next) {
   const authHeader = req.headers["authorization"] || "";
@@ -41,7 +41,7 @@ app.get("/bypass", requireAuth, async (req, res) => {
   }
 
   try {
-    new URL(url); // validate url format
+    new URL(url);
   } catch {
     return res.status(400).json({ success: false, message: "Invalid URL format" });
   }
@@ -58,19 +58,13 @@ app.get("/bypass", requireAuth, async (req, res) => {
     });
 
     if (!response.ok) {
-      return res.status(502).json({
-        success: false,
-        message: "Upstream error: HTTP " + response.status,
-      });
+      return res.status(502).json({ success: false, message: "Upstream error: HTTP " + response.status });
     }
 
     const data = await response.json();
 
     if (!data || !data.success || !data.result) {
-      return res.status(502).json({
-        success: false,
-        message: data?.message || "No result from upstream",
-      });
+      return res.status(502).json({ success: false, message: data?.message || "No result from upstream" });
     }
 
     return res.json({ success: true, result: data.result });
@@ -94,5 +88,5 @@ app.get("/", (req, res) => {
 // START
 // ============================================================
 app.listen(PORT, () => {
-  console.log(`BypassAD server running on port ${PORT}`);
+  console.log("BypassAD server running on port " + PORT);
 });
