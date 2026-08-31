@@ -19,22 +19,14 @@ function randomName(length = 10) {
     return result;
 }
 
-function escapeLuaString(str) {
-    return str
-        .replace(/\\/g, "\\\\")
-        .replace(/"/g, '\\"')
-        .replace(/\r/g, "\\r")
-        .replace(/\n/g, "\\n");
-}
-
 function obfuscateLua(source) {
     let code = String(source);
 
-    // Remove Lua comments
+    // ลบ comment
     code = code.replace(/--\[\[[\s\S]*?\]\]/g, "");
     code = code.replace(/--[^\r\n]*/g, "");
 
-    // Protect strings before modifying identifiers
+    // เก็บ string เอาไว้ก่อน
     const strings = [];
 
     code = code.replace(
@@ -46,13 +38,12 @@ function obfuscateLua(source) {
         }
     );
 
-    // Rename common local identifiers
     const reserved = new Set([
         "and", "break", "do", "else", "elseif",
         "end", "false", "for", "function", "goto",
         "if", "in", "local", "nil", "not", "or",
-        "repeat", "return", "then", "true", "until",
-        "while"
+        "repeat", "return", "then", "true",
+        "until", "while"
     ]);
 
     const names = new Map();
@@ -60,7 +51,9 @@ function obfuscateLua(source) {
     code = code.replace(
         /\b(local\s+)([A-Za-z_][A-Za-z0-9_]*)/g,
         (match, prefix, name) => {
-            if (reserved.has(name)) return match;
+            if (reserved.has(name)) {
+                return match;
+            }
 
             if (!names.has(name)) {
                 names.set(name, randomName(8));
@@ -70,28 +63,24 @@ function obfuscateLua(source) {
         }
     );
 
-    // Rename references to variables already discovered
     for (const [oldName, newName] of names.entries()) {
-        const regex = new RegExp(
-            `\\b${oldName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`,
-            "g"
+        const escaped = oldName.replace(
+            /[.*+?^${}()|[\]\\]/g,
+            "\\$&"
         );
 
-        code = code.replace(regex, newName);
+        code = code.replace(
+            new RegExp(`\\b${escaped}\\b`, "g"),
+            newName
+        );
     }
 
-    // Restore strings
+    // คืน string
     code = code.replace(
         /___LUA_STRING_(\d+)___/g,
-        (_, index) => {
-            const original = strings[Number(index)];
-
-            const content = original.slice(1, -1);
-            return `"${escapeLuaString(content)}"`;
-        }
+        (_, index) => strings[Number(index)]
     );
 
-    // Remove excessive whitespace
     code = code
         .replace(/[ \t]+/g, " ")
         .replace(/\n\s*\n\s*\n/g, "\n")
@@ -102,7 +91,7 @@ function obfuscateLua(source) {
     return `-- Lua OBF ${id}\n${code}`;
 }
 
-app.post("/api/obfuscate", async (req, res) => {
+app.post("/api/obfuscate", (req, res) => {
     try {
         const { code } = req.body;
 
@@ -151,12 +140,6 @@ app.get("/api/health", (req, res) => {
     });
 });
 
-app.get("*", (req, res) => {
-    res.sendFile(
-        path.join(__dirname, "public", "index.html")
-    );
-});
-
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
     console.log(`Lua OBF API running on port ${PORT}`);
 });
