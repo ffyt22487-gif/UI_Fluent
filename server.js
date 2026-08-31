@@ -1,92 +1,162 @@
 const express = require("express");
-const cors    = require("cors");
+const path = require("path");
+const crypto = require("crypto");
 
-const app  = express();
+const app = express();
 const PORT = process.env.PORT || 3000;
 
-// ============================================================
-// CONFIG (ตั้งค่าใน Render > Environment Variables)
-// ============================================================
-const TRW_API_KEY  = process.env.TRW_API_KEY;
-const ACCESS_TOKEN = process.env.ACCESS_TOKEN;
+app.use(express.json({ limit: "5mb" }));
+app.use(express.static(path.join(__dirname, "public")));
 
-// ============================================================
-// CORS — อนุญาตทุก origin แต่ยังต้องส่ง token ถูกต้อง
-// ============================================================
-app.use(cors({ origin: "*" }));
-app.use(express.json());
+function randomName(length = 10) {
+    const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    let result = "_";
 
-// ============================================================
-// AUTH MIDDLEWARE
-// ============================================================
-function requireAuth(req, res, next) {
-  const authHeader = req.headers["authorization"] || "";
-  const token = authHeader.replace("Bearer ", "").trim();
+    for (let i = 0; i < length; i++) {
+        result += chars[Math.floor(Math.random() * chars.length)];
+    }
 
-  if (!ACCESS_TOKEN || token !== ACCESS_TOKEN) {
-    return res.status(401).json({ success: false, message: "Unauthorized" });
-  }
-
-  next();
+    return result;
 }
 
-// ============================================================
-// ROUTE: GET /bypass?url=...
-// ============================================================
-app.get("/bypass", requireAuth, async (req, res) => {
-  const url = req.query.url;
+function escapeLuaString(str) {
+    return str
+        .replace(/\\/g, "\\\\")
+        .replace(/"/g, '\\"')
+        .replace(/\r/g, "\\r")
+        .replace(/\n/g, "\\n");
+}
 
-  if (!url) {
-    return res.status(400).json({ success: false, message: "Missing url parameter" });
-  }
+function obfuscateLua(source) {
+    let code = String(source);
 
-  try {
-    new URL(url);
-  } catch {
-    return res.status(400).json({ success: false, message: "Invalid URL format" });
-  }
+    // Remove Lua comments
+    code = code.replace(/--\[\[[\s\S]*?\]\]/g, "");
+    code = code.replace(/--[^\r\n]*/g, "");
 
-  try {
-    const apiUrl =
-      "https://trw.lat/api/bypass" +
-      "?apikey=" + encodeURIComponent(TRW_API_KEY) +
-      "&url="    + encodeURIComponent(url);
+    // Protect strings before modifying identifiers
+    const strings = [];
 
-    const response = await fetch(apiUrl, {
-      signal: AbortSignal.timeout(15000),
-      headers: { "User-Agent": "BypassAD/1.0" },
+    code = code.replace(
+        /"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'/g,
+        (match) => {
+            const id = strings.length;
+            strings.push(match);
+            return `___LUA_STRING_${id}___`;
+        }
+    );
+
+    // Rename common local identifiers
+    const reserved = new Set([
+        "and", "break", "do", "else", "elseif",
+        "end", "false", "for", "function", "goto",
+        "if", "in", "local", "nil", "not", "or",
+        "repeat", "return", "then", "true", "until",
+        "while"
+    ]);
+
+    const names = new Map();
+
+    code = code.replace(
+        /\b(local\s+)([A-Za-z_][A-Za-z0-9_]*)/g,
+        (match, prefix, name) => {
+            if (reserved.has(name)) return match;
+
+            if (!names.has(name)) {
+                names.set(name, randomName(8));
+            }
+
+            return prefix + names.get(name);
+        }
+    );
+
+    // Rename references to variables already discovered
+    for (const [oldName, newName] of names.entries()) {
+        const regex = new RegExp(
+            `\\b${oldName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`,
+            "g"
+        );
+
+        code = code.replace(regex, newName);
+    }
+
+    // Restore strings
+    code = code.replace(
+        /___LUA_STRING_(\d+)___/g,
+        (_, index) => {
+            const original = strings[Number(index)];
+
+            const content = original.slice(1, -1);
+            return `"${escapeLuaString(content)}"`;
+        }
+    );
+
+    // Remove excessive whitespace
+    code = code
+        .replace(/[ \t]+/g, " ")
+        .replace(/\n\s*\n\s*\n/g, "\n")
+        .trim();
+
+    const id = crypto.randomBytes(8).toString("hex");
+
+    return `-- Lua OBF ${id}\n${code}`;
+}
+
+app.post("/api/obfuscate", async (req, res) => {
+    try {
+        const { code } = req.body;
+
+        if (typeof code !== "string") {
+            return res.status(400).json({
+                success: false,
+                error: "code must be a string"
+            });
+        }
+
+        if (!code.trim()) {
+            return res.status(400).json({
+                success: false,
+                error: "Lua code is empty"
+            });
+        }
+
+        if (code.length > 5 * 1024 * 1024) {
+            return res.status(413).json({
+                success: false,
+                error: "Lua code is too large"
+            });
+        }
+
+        const result = obfuscateLua(code);
+
+        res.json({
+            success: true,
+            code: result
+        });
+
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).json({
+            success: false,
+            error: "Obfuscation failed"
+        });
+    }
+});
+
+app.get("/api/health", (req, res) => {
+    res.json({
+        success: true,
+        status: "online"
     });
-
-    if (!response.ok) {
-      return res.status(502).json({ success: false, message: "Upstream error: HTTP " + response.status });
-    }
-
-    const data = await response.json();
-
-    if (!data || !data.success || !data.result) {
-      return res.status(502).json({ success: false, message: data?.message || "No result from upstream" });
-    }
-
-    return res.json({ success: true, result: data.result });
-
-  } catch (err) {
-    if (err.name === "TimeoutError" || err.name === "AbortError") {
-      return res.status(504).json({ success: false, message: "Upstream timeout" });
-    }
-    return res.status(500).json({ success: false, message: "Server error" });
-  }
 });
 
-// ============================================================
-// HEALTH CHECK
-// ============================================================
-app.get("/", (req, res) => {
-  res.json({ status: "ok" });
+app.get("*", (req, res) => {
+    res.sendFile(
+        path.join(__dirname, "public", "index.html")
+    );
 });
 
-// ============================================================
-// START
-// ============================================================
 app.listen(PORT, () => {
-  console.log("BypassAD server running on port " + PORT);
+    console.log(`Lua OBF API running on port ${PORT}`);
 });
